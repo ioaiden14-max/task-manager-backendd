@@ -15,9 +15,6 @@ const JWT_SECRET = process.env.JWT_SECRET;
 app.use(cors());
 app.use(express.json());
 
-// connect to DB
-connectDB();
-
 // test route
 app.get("/", (req, res) => {
   res.send("Backend is running");
@@ -114,9 +111,7 @@ app.get("/tasks", auth, async (req, res) => {
   try {
     const pool = getPool();
 
-    const result = await pool
-      .request()
-      .query("SELECT * FROM Tasks");
+    const result = await pool.request().query("SELECT * FROM Tasks");
 
     res.json(result.recordset);
   } catch (error) {
@@ -189,7 +184,9 @@ app.delete("/tasks/:id", auth, async (req, res) => {
   }
 });
 
-// start server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// START SERVER AFTER DB CONNECTS
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
 });
