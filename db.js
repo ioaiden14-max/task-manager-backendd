@@ -11,13 +11,17 @@ const config = {
   },
 };
 
+let pool;
+
 const connectDB = async () => {
   try {
-    await sql.connect(config);
+    pool = await sql.connect(config);
     console.log("Connected to Azure SQL");
   } catch (err) {
     console.error("DB Connection Error:", err);
   }
 };
 
-module.exports = { sql, connectDB };
+const getPool = () => pool;
+
+module.exports = { sql, connectDB, getPool };
