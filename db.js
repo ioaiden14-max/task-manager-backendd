@@ -17,8 +17,10 @@ const connectDB = async () => {
   try {
     pool = await sql.connect(config);
     console.log("Connected to Azure SQL");
+    return pool;
   } catch (err) {
     console.error("DB Connection Error:", err);
+    throw err;
   }
 };
 
